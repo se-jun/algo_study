@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import java.util.*;
 
 class Solution {
@@ -46,4 +47,54 @@ class Solution {
             find(cnt + 1, str + now, targetNum, i + 1, word);
         }
     }
+=======
+import java.util.*;
+
+class Solution {
+    // <key , value> = <String, counting개수>
+    static HashMap<String, Integer> map;
+    static int m;
+
+    public String[] solution(String[] orders, int[] course) {
+        PriorityQueue<String> pq = new PriorityQueue<>();
+        //각각의 "요리의 개수"에 대하여 실행.
+        for (int i = 0; i < course.length; i++) {
+            map = new HashMap<>();
+            m = 0;
+            for (int j = 0; j < orders.length; j++) {
+                find(0, "", course[i], 0, orders[j]);
+            }
+            for (String s : map.keySet()) {
+                //최대값m인 value를 가진 key값을 찾아서
+                if (map.get(s) == m && m > 1) {
+                    pq.offer(s);//우선순위 큐에다가 집어넣는다.
+                }
+            }
+        }
+        String ans[] = new String[pq.size()];
+        int k = 0;
+        while (!pq.isEmpty()) {
+            ans[k++] = pq.poll();
+        }
+        return ans;
+    }
+
+    static void find(int cnt, String str, int targetNum, int idx, String word) {
+        if (cnt == targetNum) {
+            char[] c = str.toCharArray();
+            Arrays.sort(c);
+            String temps = "";
+            for (int i = 0; i < c.length; i++) //정렬 이후 합치기
+                temps += c[i];
+            // 각 음식세트 카운팅
+            map.put(temps, map.getOrDefault(temps, 0) + 1);
+            m = Math.max(m, map.get(temps));
+            return;
+        }
+        for (int i = idx; i < word.length(); i++) {
+            char now = word.charAt(i);
+            find(cnt + 1, str + now, targetNum, i + 1, word);
+        }
+    }
+>>>>>>> branch 'main' of https://github.com/se-jun/algo_study
 }
