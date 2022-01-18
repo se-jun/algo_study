@@ -1,0 +1,72 @@
+class Solution {
+    int convert(String time){
+        String[] sArr = time.split(":");
+        return 3600 * Integer.valueOf(sArr[0]) + 60 * Integer.valueOf(sArr[1]) + Integer.valueOf(sArr[2]);
+    }
+    
+    String convert(int time){
+        // 시, 분, 초 할당
+        int hour = time / 3600;
+        time %= 3600;
+        int min = time / 60;
+        time %= 60;
+        int sec = time;
+        
+        StringBuilder sb = new StringBuilder("");
+        
+        if(hour < 10) {
+            sb.append("0");
+        }
+        
+        sb.append(Integer.valueOf(hour));
+        sb.append(":");
+        
+        if(min < 10) {
+            sb.append("0");
+        }
+        
+        sb.append(Integer.valueOf(min));
+        sb.append(":");
+        
+        if(sec < 10) {
+            sb.append("0");
+        }
+        sb.append(Integer.valueOf(sec));
+        
+        return sb.toString();
+    }
+    
+    public String solution(String play_time, String adv_time, String[] logs) {
+        String answer = "";
+        long[] arr = new long[convert(play_time) + 1];
+        
+        for(int i = 0; i < logs.length; i++){
+            String[] sArr = logs[i].split("-");
+            
+            int start = convert(sArr[0]);
+            int end = convert(sArr[1]);
+            
+            arr[start]++;
+            arr[end]--;
+        }
+        
+        for(int i = 1; i < arr.length; i++)
+            arr[i] += arr[i - 1];
+        
+        for(int i = 1; i < arr.length; i++)
+            arr[i] += arr[i - 1];
+        
+        int adtime = convert(adv_time);
+        long maxRet = arr[adtime - 1];
+        int maxTime = 0;
+        
+        for(int i = adtime; i < arr.length; i++){
+            if(maxRet < arr[i] - arr[i - adtime]){
+                maxRet = arr[i] - arr[i - adtime];
+                maxTime = i - adtime + 1;
+            }
+        }
+        
+        return convert(maxTime);
+    }
+}
